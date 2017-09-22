@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="assets/bootstrap.min.css" />
+    </head>
+    <body style="padding-top: 3.5rem;">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="#">WSX</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-3">Websocket Tutorial X</h1>
+                <h2><small class="text-muted">Non-Blocking Distributed Architecture</small></h2>
+                <p>
+                    WSX covers a more complex architecture. Distributed systems can communicate by using messaging and
+                    the STOMP protocol enables us to incorporate RabbitMQ with the React event loop asynchronously.
+                    WSX also covers Pub/Sub and RPC patterns over the Websocket protocol using WAMP version 2.
+                </p>
+                <p>
+                    You can access the docker container with:
+                    <code class="highlighter-rouge">
+                        docker exec -i -t $(docker-compose ps | grep 'php' | awk '{print $1}') /bin/bash
+                    </code>
+                </p>
+                <p>
+                    To start the Websocket server within the docker container, run:
+                    <code class="highlighter-rouge">php /appdata/bin/websocket-server.php</code>
+                </p>
+                <hr />
+                <p class="lead">
+                    WSX contains the following parts:
+                </p>
+                <p>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-primary">
+                            <p>
+                                <span class="badge badge-success">#1</span>
+                                Use phirehose to subscribe to a twitter stream and place this data into a RabbitMQ queue
+                            </p>
+                            <div class="jumbotron alert-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Files used</strong>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Documentation</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        bin/twitter-stream.php
+                                    </div>
+                                    <div class="col">
+                                        <a href="https://github.com/fennb/phirehose/wiki/Introduction">
+                                            Phirehose Documentation
+                                        </a>
+                                        <br />
+                                        <a href="http://php.net/manual/fa/amqp.examples.php">
+                                            PHP \AMQP Example Documentation
+                                        </a>
+                                        <br />
+                                        <a href="http://localhost:15673">
+                                            RabbitMQ Management
+                                        </a>
+                                        <br />
+                                        <small>(Credentials in docker-compose.yml)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-primary">
+                            <p>
+                                <span class="badge badge-success">#2</span>
+                                Utilise react/STOMP to consume RabbitMQ messages asynchronously while event loop is running
+                            </p>
+                            <div class="jumbotron alert-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Files used</strong>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Documentation</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        bin/websocket-server.php
+                                        <br />
+                                        src/EventHandler.php
+                                    </div>
+                                    <div class="col">
+                                        <a href="https://github.com/friends-of-reactphp/stomp#example">
+                                            react/stomp Documentation
+                                        </a>
+                                        <br />
+                                        <a href="http://www.rabbitmq.com/stomp.html">
+                                            RabbitMQ Stomp Plugin Documentation
+                                        </a>
+                                        <br />
+                                        <small>(Make sure to check the Destinations section)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-primary">
+                            <p>
+                                <span class="badge badge-success">#3</span>
+                                Broadcast data retrieved from RabbitMQ over Websockets to subscribed clients in the event
+                                loop, and display this in the browser
+                            </p>
+                            <div class="jumbotron alert-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Files used</strong>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Documentation</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        src/EventHandler.php
+                                        <br />
+                                        web/assets/websockets.js
+                                    </div>
+                                    <div class="col">
+                                        <a href="https://github.com/voryx/Thruway#php-client-example">
+                                            voryx/thruway Documentation
+                                        </a>
+                                        <br />
+                                        <a href="https://github.com/crossbario/autobahn-js#show-me-some-code">
+                                            autobahn.js Documentation
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-primary">
+                            <p>
+                                <span class="badge badge-success">#4</span>
+                                Register the JavaScript client as an RPC endpoint and have a PHP script make an RPC call to
+                                it with a filter change using autobahn.js and Thruway as the broker
+                            </p>
+                            <div class="jumbotron alert-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Files used</strong>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Documentation</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        bin/change-filter.php
+                                        <br />
+                                        web/assets/websockets.js
+                                    </div>
+                                    <div class="col">
+                                        <a href="https://github.com/voryx/Thruway#php-client-example">
+                                            voryx/thruway Documentation
+                                        </a>
+                                        <br />
+                                        <a href="https://github.com/crossbario/autobahn-js#show-me-some-code">
+                                            autobahn.js Documentation
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-primary">
+                            <p>
+                                <span class="badge badge-success">#5</span>
+                                Forward the previous RPC call containing the new filter to use for tweets to the event loop
+                                by making a second RPC call
+                            </p>
+                            <div class="jumbotron alert-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Files used</strong>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Documentation</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        web/assets/websockets.js
+                                        <br />
+                                        src/EventHandler.php
+                                    </div>
+                                    <div class="col">
+                                        <a href="https://github.com/voryx/Thruway#php-client-example">
+                                            voryx/thruway Documentation
+                                        </a>
+                                        <br />
+                                        <a href="https://github.com/crossbario/autobahn-js#show-me-some-code">
+                                            autobahn.js Documentation
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-primary">
+                            <p>
+                                <span class="badge badge-success">#6</span>
+                                Store the result of the previous RPC call in Redis, to be used by phirehose
+                            </p>
+                            <div class="jumbotron alert-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Files used</strong>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Documentation</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        src/EventHandler.php
+                                    </div>
+                                    <div class="col">
+                                        <a href="https://github.com/phpredis/phpredis#class-redis">
+                                            \Redis Example Documentation
+                                        </a>
+                                        <br />
+                                        <a href="https://github.com/phpredis/phpredis#set">
+                                            \Redis set() Documentation
+                                        </a>
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-primary">
+                            <p>
+                                <span class="badge badge-success">#7</span>
+                                Phirehose has a method called automatically every 5 seconds that checks for any new filters,
+                                use this to read from Redis and make a change to the filters
+                            </p>
+                            <div class="jumbotron alert-primary">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Files used</strong>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Documentation</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        bin/twitter-stream.php
+                                    </div>
+                                    <div class="col">
+                                        <a href="https://github.com/fennb/phirehose/wiki/Introduction#implementation-recommended">
+                                            Phirehose Documentation
+                                        </a>
+                                        <br />
+                                        <a href="https://github.com/phpredis/phpredis#get">
+                                            \Redis get() Documentation
+                                        </a>
+                                        <br />
+                                        <small>Make sure to check out how to use checkFilterPredicates()</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h2>Streamed Data</h2>
+                    <p>
+                        <div id="data-tweet" class="alert alert-primary" role="alert">...</div>
+                    </p>
+                </div>
+            </div>
+
+            <hr>
+
+            <footer>
+                <p class="text-muted">James Mallison - PHPNW 2017</p>
+            </footer>
+        </div>
+
+        <script type="text/javascript" src="assets/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/popper.min.js"></script>
+        <script type="text/javascript" src="assets/bootstrap.min.js"></script>
+        <script type="text/javascript" src="assets/autobahn.min.js"></script>
+        <script type="text/javascript" src="assets/websockets.js"></script>
+    </body>
+</html>
